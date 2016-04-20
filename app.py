@@ -1,6 +1,6 @@
 from flask import Flask, request, Response
 from kik import KikApi, Configuration
-from kik.messages import messages_from_json, TextMessage, SuggestedResponseKeyboard, TextResponse, VideoMessage, StartChattingMessage
+from kik.messages import messages_from_json, TextMessage, SuggestedResponseKeyboard, TextResponse, VideoMessage, StartChattingMessage, PictureMessage
 import getGiphy
 
 app = Flask(__name__)
@@ -87,16 +87,22 @@ def incoming():
                             ]
                         )
                     ])
-                message = TextReponse
+                message = TextResponse
 
         if isinstance(message, TextMessage):
             if message.body == 'Chainsaw':
-
-
-
-
-
-
+                kik.send_messages([
+                        PictureMessage(
+                            to=message.from_user,
+                            chat_id=message.chat_id,
+                            pic_url='http://thecord.ca/wp-content/uploads/2014/09/Chainsaw-Heather-Davidson.jpg',
+                        ),
+                        TextMessage(
+                            to=message.from_user,
+                            chat_id=message.chat_id,
+                            body='Address: 28 King St N,\n Waterloo, ON N2J 2W6\nPhone:(519) 954-8660'
+                        )
+                ])
 
         return Response(status=200)
 
